@@ -152,6 +152,11 @@ function batchKeyups() {
     batchTimeout = setTimeout(submitQuery, 300);
 }
 
+function derp() {
+    var $l = $('#links');
+    $l.css('display', $l.css('display') == 'none'? '':'none');
+}
+
 var hiddenLinks = null;
 $(function() {
     console.log("hello");

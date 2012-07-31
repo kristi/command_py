@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Parse Python doc to create index
@@ -16,6 +17,13 @@ def write_html(soup, html_file):
         print >>f, soup
         
         
+def write_obj(links, link_file):
+    with open(link_file, 'w') as f:
+        for link in links:
+            obj = dict(href=link['href'], text=str(link.text))
+            print >>f, obj
+
+
 def write_links(links, link_file):
     with open(link_file, 'w') as f:
         print >>f, """<html>
@@ -54,6 +62,7 @@ def parse_all(index_file):
     # DEBUG
     write_html(soup, "output.html")
     write_links(all_links, "links.html")
+    write_obj(all_links, "obj.txt")
     print "there are {num} links".format(num=len(all_links))
     return all_links
 
