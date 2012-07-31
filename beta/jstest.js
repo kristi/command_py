@@ -75,11 +75,13 @@ function kscore(str, abbrevRegex) {
 }
 
 
-function submitQuery(e) {
-    e.preventDefault();
+
+function submitQuery() {
+    //e.preventDefault();
     //var $form = $(this);
     //var $input = $form.find("input");
-    var form = this;
+    //var form = this;
+    var form = document.getElementById("search").getElementsByTagName("form")[0];
     var input = form.getElementsByTagName("input")[0];
     var abbrev = input.value;
     var abbrevArray = abbrev.split('');
@@ -136,47 +138,27 @@ function submitQuery(e) {
     }
     for (var i = 0; i < showArr.length; ++i) {
         var item = showArr[i];
-        //item.innerHTML = item.text + " " + item.score;
-        if (i < 10) {
-            //console.log(item.text + item.score);
-        }
         links.appendChild(item);
     }
     links.style.display = "";
     linksParent.appendChild(links);
-    //linksParent.appendChild(hiddenLinks);
     console.log("done");
-
-    /*
-    $("#links a").each(function(index, el) {
-        var $this = $(this);
-        var str = $this.text();
-        var score = tscore(str, abbrev);
-        $this.score = score;
-        if (score == 0) {
-            $this.css('display', 'none');
-        } else {
-            $this.css('display', 'inline-block');
-        }
-    });
-    */
-
-    /*
-    var $links = $("#links a");
-    var display = [];
-    $links.detach().sort(function(a, b) {
-        return tscore($(b).text(), abbrev) - tscore($(a).text(), abbrev);
-    }).appendTo("#links");
-    */
-
     return false;
 }
+
+var batchTimeout = null;
+function batchKeyups() {
+    if (batchTimeout) clearTimeout(batchTimeout);
+    batchTimeout = setTimeout(submitQuery, 300);
+}
+
 var hiddenLinks = null;
 $(function() {
     console.log("hello");
     hiddenLinks = document.getElementById("hiddenLinks");
     hiddenLinks.parentNode.removeChild(hiddenLinks);
-
+    $("#idowhatiwant").focus()
     //$("#search form").submit(submitQuery);
-    document.getElementById("search").getElementsByTagName("form")[0].onkeyup = submitQuery;
+    //document.getElementById("search").getElementsByTagName("form")[0].onkeyup = submitQuery;
+    document.getElementById("search").getElementsByTagName("form")[0].onkeyup = batchKeyups;
 });
