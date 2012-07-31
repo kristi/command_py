@@ -14,13 +14,18 @@ function tscore(str, abbrev) {
 function recursive_match(m, str_idx, abbrev_idx, last_idx, score) {
     var seen_score = 0;
     for (var i = abbrev_idx; i < m.abbrev.length; i++) {
-        var c = m.abbrev[i];
+        var C = m.abbrev[i];
+        var c = C.toLowerCase();
         var found = 0;
         for (var j = str_idx; j < m.str.length; j++, str_idx++) {
-            var d = m.str[j].toLowerCase();
+            var D = m.str[j];
+            var d = D.toLowerCase();
             if ( c == d ) {
                 found = 1;
                 var score_for_char = m.max_score_per_char;
+                if ( C != D ) {
+                    score_for_char *= 0.9;
+                }
                 var distance = j - last_idx;
                 if ( distance > 1 ) {
                     var factor = 1.0;
@@ -71,7 +76,7 @@ function kscore(str, abbrevRegex) {
 
 function submitQuery() {
     var input = document.getElementById("search");
-    var abbrev = input.value;
+    var abbrev = input.value.toLowerCase();
     var abbrevArray = abbrev.split('');
 
     if (!abbrev) {
@@ -82,7 +87,7 @@ function submitQuery() {
     for (var i = 0; i < abbrevArray.length; ++i) {
         abbrevArray[i] = regexEscape(abbrevArray[i]);
     }
-    var abbrevRegexStr = "^(.*)(" + abbrevArray.join(")(.*)(") + ")(.*)$";
+    var abbrevRegexStr = "^(.*?)(" + abbrevArray.join(")(.*?)(") + ")(.*?)$";
     var abbrevRegex = new RegExp(abbrevRegexStr, "i");
 
     var showArr = [];
