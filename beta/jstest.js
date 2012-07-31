@@ -22,8 +22,7 @@ function recursive_match(m, str_idx, abbrev_idx, last_idx, score) {
         var c = m.abbrev[i];
         var found = 0;
         for (var j = str_idx; j < m.str.length; j++, str_idx++) {
-            var D = m.str[j];
-            var d = D.toLowerCase();
+            var d = m.str[j].toLowerCase();
             if ( c == d ) {
                 found = 1;
                 var score_for_char = m.max_score_per_char;
@@ -54,14 +53,9 @@ function recursive_match(m, str_idx, abbrev_idx, last_idx, score) {
                         seen_score = sub_score;
                     }
                 }
-
                 score += score_for_char;
                 last_idx = str_idx++;
                 break;
-            }
-            if ( d == "." ) {
-                //last_idx = str_idx++;
-                //last_idx = j;
             }
         }
         if (found == 0) {
@@ -80,6 +74,7 @@ function kscore(str, abbrevRegex) {
     return match;
 }
 
+
 function submitQuery(e) {
     e.preventDefault();
     //var $form = $(this);
@@ -97,19 +92,19 @@ function submitQuery(e) {
     //console.log(kscore("goodbye", abbrevRegex));
 
     var links = document.getElementById("links");
-    var hiddenLinks = document.getElementById("hiddenLinks");
     var linksParent = links.parentNode;
     linksParent.removeChild(links);
-    linksParent.removeChild(hiddenLinks);
+    links.style.display = "none";
     //var itemsArr = Array.prototype.slice.call(links.children);
     var showArr = [];
     var hideArr = [];
     var unhideArr = [];
+    var threshold = 0.1;
     var itemsArr = links.children;
     for (var i = 0; i < itemsArr.length; ++i) {
         var item = itemsArr[i];
         item.score = tscore(item.text, abbrev);
-        if (item.score < 0.2) {
+        if (item.score < threshold) {
             hideArr.push(item);
         } else {
             showArr.push(item);
@@ -119,7 +114,7 @@ function submitQuery(e) {
     for (var i = 0; i < itemsArr.length; ++i) {
         var item = itemsArr[i];
         item.score = tscore(item.text, abbrev);
-        if (item.score < 0.2) {
+        if (item.score < threshold) {
             // already hidden, do nothing
         } else {
             unhideArr.push(item);
@@ -127,20 +122,29 @@ function submitQuery(e) {
         }
     }
     showArr.sort(function(a, b) {
-        return b.score - a.score;
+        //return (b.innerHTML < a.innerHTML);
+        return (b.score - a.score) || ((b.text < a.text) ? 1 : -1);
     });
     for (var i = 0; i < unhideArr.length; ++i) {
-        hiddenLinks.removeChild(unhideArr[i]);
+        var item = unhideArr[i];
+        hiddenLinks.removeChild(item);
     }
     for (var i = 0; i < hideArr.length; ++i) {
-        links.removeChild(hideArr[i]);
-        hiddenLinks.appendChild(hideArr[i]);
+        var item = hideArr[i];
+        links.removeChild(item);
+        hiddenLinks.appendChild(item);
     }
     for (var i = 0; i < showArr.length; ++i) {
-        links.appendChild(showArr[i]);
+        var item = showArr[i];
+        //item.innerHTML = item.text + " " + item.score;
+        if (i < 10) {
+            //console.log(item.text + item.score);
+        }
+        links.appendChild(item);
     }
+    links.style.display = "";
     linksParent.appendChild(links);
-    linksParent.appendChild(hiddenLinks);
+    //linksParent.appendChild(hiddenLinks);
     console.log("done");
 
     /*
@@ -167,8 +171,12 @@ function submitQuery(e) {
 
     return false;
 }
+var hiddenLinks = null;
 $(function() {
     console.log("hello");
+    hiddenLinks = document.getElementById("hiddenLinks");
+    hiddenLinks.parentNode.removeChild(hiddenLinks);
+
     //$("#search form").submit(submitQuery);
-    document.getElementById("search").getElementsByTagName("form")[0].onsubmit = submitQuery;
+    document.getElementById("search").getElementsByTagName("form")[0].onkeyup = submitQuery;
 });
