@@ -1,4 +1,4 @@
-var tmpl_data = [
+var TEMPLATE_DATA = [
 {'text': '!= {operator}', 'href': 'library/stdtypes.html#index-9'},
 {'text': '% {operator}', 'href': 'library/stdtypes.html#index-15'},
 {'text': '% formatting', 'href': 'library/stdtypes.html#index-24'},

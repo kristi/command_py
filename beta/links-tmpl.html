@@ -1,12 +1,15 @@
 <html>
   <head>
-    <title>Test Command-T Scoring Algorithm in Javascript</title>
+    <title>Command-Py: Python Documentaion Searcher</title>
     <style>
-      .shown {
-        display: inline-block;
+      body {
+        font-family: sans-serif;
+        font-size: 14px;
+        line-height: 1.4;
       }
-      .hidden {
-        display: none;
+      h1 {
+        font-size: 16px;
+        color: gray;
       }
       #links {
         overflow: hide;
@@ -15,36 +18,49 @@
         display: inline-block;
         float: left;
         clear: both;
+        color: steelblue;
+        text-decoration: none;
       }
-      #search input {
-        width: 400px;
+      #links > a:hover {
+        text-decoration: underline;
+      }
+      #links a:first-child {
         font-size: 20px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+      }
+      #search-container {
+        margin: 10px 0px;
+      }
+      #search {
+        width: 300px;
+        font-size: 16px;
       }
       .highlight {
-        background: yellow;
+        font-weight: bold;
       }
     </style>
   </head>
   <body>
-    <div>
+    <h1>Command-Py: Python Documentaion Searcher</h1>
+    <div id="search-container">
       <input id="search" type="text">
     </div>
+
+
     <div id="links">
-     
     </div>
 
-    <div id="hiddenLinks" class="hidden">
-    </div>
 
     <script id="link-template" type="text/html">
-      <a href="http://docs.python.org/2.7/<%= this.href %>"><%= this.highlighted %></a><br/>
+      <a href="http://docs.python.org/2.7/<%= this.href %>" title="<%= this.title %>" data-score="<%= this.score %>"><%= this.highlighted %></a><br/>
     </script>
 
     <script src="jquery-1.7.2.js"></script>
     <script src="jquery.typewatch.min.js"></script>
     <script src="jquery.jqote2.min.js"></script>
-    <script src="jstest-tmpl.js"></script>
     <script src="tmpl-data.js"></script>
+    <script src="jstest-tmpl.js"></script>
 </body>
 </html>
            

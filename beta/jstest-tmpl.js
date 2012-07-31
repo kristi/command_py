@@ -4,7 +4,7 @@ function tscore(str, abbrev) {
     m.str = str;
     filename = str.replace(/[^ ]*?\b(\w*)(?:\(\)|)(?: [({].*[)}]|)$/, '$1');
     m.abbrev = abbrev;
-    m.max_score_per_char = (0.2 / (1 + filename.length) + 0.4 / (1 + str.length) + 1.2 / (1 + abbrev.length)) / 2;
+    m.max_score_per_char = (0.3 / (2 + Math.max(filename.length,3)) + 0.4 / (1 + str.length) + 1.2 / (1 + abbrev.length)) / 2;
     if ( abbrev.length != 0 ) {
         score = recursive_match(m, 0, 0, 0, 0.0);
     }
@@ -26,7 +26,13 @@ function recursive_match(m, str_idx, abbrev_idx, last_idx, score) {
                 if ( C != D ) {
                     score_for_char *= 0.9;
                 }
+                if ( j == 0 ) {
+                    score_for_char *= 1.1;
+                }
                 var distance = j - last_idx;
+                if ( c == "." ) {
+                    distance = 0;
+                }
                 if ( distance > 1 ) {
                     var factor = 1.0;
                     var last = m.str[j - 1];
@@ -34,7 +40,7 @@ function recursive_match(m, str_idx, abbrev_idx, last_idx, score) {
                     if (last == "/") {
                         factor = 0.8;
                     } else if ( last == '.' ) {
-                        factor = 1.0;
+                        factor = 1.1;
                     } else if ( last == "_" || last == " " || last == "-" || last == "(" || last == "{" || (last >= "0" && last <= "9") ) {
                         factor = 0.6;
                     } else {
@@ -74,7 +80,7 @@ function kscore(str, abbrevRegex) {
     return match;
 }
 
-function submitQuery() {
+function doQuery() {
     var input = document.getElementById("search");
     var abbrev = input.value.toLowerCase();
     var abbrevArray = abbrev.split('');
@@ -92,16 +98,15 @@ function submitQuery() {
 
     var showArr = [];
     var threshold = 0.1;
-    var itemsArr = tmpl_data;
-    for (var i = 0; i < itemsArr.length; ++i) {
-        var item = itemsArr[i];
+    for (var i=0; i < TEMPLATE_DATA.length; ++i) {
+        var item = TEMPLATE_DATA[i];
         item.score = tscore(item.text, abbrev);
         if (item.score > threshold) {
             showArr.push(item);
         }
     }
     showArr.sort(function(a, b) {
-        return (b.score - a.score) || ((b.text < a.text) ? 1 : -1);
+        return (b.score - a.score) || ((b.text == a.text) ? 0 : (b.text < a.text) ? 1 : -1);
     });
     showArr = showArr.slice(0,100);
     for (var i = 0; i < showArr.length; ++i) {
@@ -116,18 +121,29 @@ function submitQuery() {
         item.highlighted = match.join('');
     }
     console.log(showArr.length);
-    $("#links").html('');
-    $("#links").append($("#link-template").jqote(showArr));
+    $("#links").jqotesub("#link-template", showArr);
     console.log("done");
     return false;
 }
 
-function highlight(text) {
-    return text;
+function initDataFilename() {
+    for (var i=0; i < TEMPLATE_DATA.length; ++i) {
+        var item = TEMPLATE_DATA[i];
+        var str = item.text;
+        item.filename = str.replace(/[^ ]*?\b(\w*)(?:\(\)|)(?: [({].*[)}]|)$/, '$1');
+        item.title = item.filename;
+    }
 }
 
 $(function() {
     $("#search").focus();
-    document.getElementById("search").onkeyup = submitQuery;
-    submitQuery();
+    //document.getElementById("search").onkeyup = doQuery;
+    $("#search").typeWatch({
+        callback: doQuery,
+        wait: 300,
+        captureLength: 0
+    });
+
+    initDataFilename();
+    doQuery();
 });
