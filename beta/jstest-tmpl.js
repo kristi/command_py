@@ -138,6 +138,11 @@ function initDataFilename() {
     }
 }
 
+function hackFocus() {
+    window.scrollTo(0, 0);
+    $("#search").focus();
+}
+
 $(function() {
     $("#search").focus();
     //document.getElementById("search").onkeyup = doQuery;
