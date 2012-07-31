@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <title>Command-Py: Python Documentaion Searcher</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      h1 {
+        font-size: 16px;
+        color: gray;
+      }
+      #links {
+        overflow: hide;
+      }
+      #links > a {
+        display: inline-block;
+        color: steelblue;
+        text-decoration: none;
+      }
+      #links > a:hover {
+        text-decoration: underline;
+      }
+      #links > a:first-child {
+        font-size: 20px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+      }
+      #links div {
+        resize: both;
+        width: 600px;
+        height: 150px;
+      }
+      #links div iframe {
+        width: 100%;
+        height: 100%;
+      }
+      #search-container {
+        margin: 10px 0px;
+      }
+      #search {
+        width: 300px;
+        font-size: 16px;
+      }
+      .highlight {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Command-Py: Python Documentaion Searcher</h1>
+    <div id="search-container">
+      <input id="search" type="text">
+    </div>
+
+
+    <div id="links">
+    </div>
+
+
+    <script id="link-template" type="text/html">
+      <a href="http://docs.python.org/2.7/<%= this.href %>" title="<%= this.title %>" data-score="<%= this.score %>"><%= this.highlighted %></a><br/>
+    </script>
+    <script id="ref-template" type="text/html">
+      <div><iframe src="http://docs.python.org/2.7/<%= this.href %>" ></iframe></div>
+    </script>
+
+    <script src="jquery-1.7.2.js"></script>
+    <script src="jquery.typewatch.min.js"></script>
+    <script src="jquery.jqote2.min.js"></script>
+    <script src="tmpl-data.js"></script>
+    <script src="jstest-tmpl.js"></script>
+</body>
+</html>
+           
