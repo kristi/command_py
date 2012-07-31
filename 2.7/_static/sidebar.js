@@ -144,5 +144,6 @@ $(function() {
 
   add_sidebar_button();
   var sidebarbutton = $('#sidebarbutton');
+  collapse_sidebar();
   set_position_from_cookie();
 });
