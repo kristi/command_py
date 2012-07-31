@@ -121,7 +121,10 @@ function doQuery() {
         item.highlighted = match.join('');
     }
     console.log(showArr.length);
-    $("#links").jqotesub("#link-template", showArr);
+    var links = $("#links").jqotesub("#link-template", showArr);
+    if (showArr.length >= 1) {
+        links.children().first().jqoteapp("#ref-template", showArr[0]);
+    }
     console.log("done");
     return false;
 }
