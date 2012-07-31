@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <title>Test Command-T Scoring Algorithm in Javascript</title>
+    <style>
+      .shown {
+        display: inline-block;
+      }
+      .hidden {
+        display: none;
+      }
+      #links {
+        overflow: hide;
+      }
+      #links > a {
+        display: inline-block;
+        float: left;
+        clear: both;
+      }
+      #search input {
+        width: 400px;
+        font-size: 20px;
+      }
+      .highlight {
+        background: yellow;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <input id="search" type="text">
+    </div>
+    <div id="links">
+     
+    </div>
+
+    <div id="hiddenLinks" class="hidden">
+    </div>
+
+    <script id="link-template" type="text/html">
+      <a href="http://docs.python.org/2.7/<%= this.href %>"><%= this.highlighted %></a><br/>
+    </script>
+
+    <script src="jquery-1.7.2.js"></script>
+    <script src="jquery.typewatch.min.js"></script>
+    <script src="jquery.jqote2.min.js"></script>
+    <script src="jstest-tmpl.js"></script>
+    <script src="tmpl-data.js"></script>
+</body>
+</html>
+           
