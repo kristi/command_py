@@ -140,7 +140,7 @@ function initDataFilename() {
 
 function hackFocus() {
     window.scrollTo(0, 0);
-    $("#search").focus();
+    //$("#search").focus();
 }
 
 $(function() {
