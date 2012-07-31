@@ -123,7 +123,7 @@ function doQuery() {
     console.log(showArr.length);
     var links = $("#links").jqotesub("#link-template", showArr);
     if (showArr.length >= 1) {
-        links.children().first().jqoteapp("#ref-template", showArr[0]);
+        links.children().first().jqoteapp("#ref-template", showArr[0]).find("iframe").load(hackFocus);
     }
     console.log("done");
     return false;
@@ -138,9 +138,8 @@ function initDataFilename() {
     }
 }
 
-function hackFocus() {
+function hackFocus(e) {
     window.scrollTo(0, 0);
-    //$("#search").focus();
 }
 
 $(function() {
